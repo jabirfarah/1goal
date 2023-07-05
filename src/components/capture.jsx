@@ -40,25 +40,22 @@ export default function Capture() {
     tags: ["test5", "test6"],
     completed: false,
   }]);
-  const goal = document.querySelector('capture-goal');
-  const tags = document.querySelector('input-custom-dropdown');
-  const submit = document.querySelector('capture-submit');
-  let goalList = [];
-  
+
+  const [tags, setTags] = useState([]);
+  const goals = document.getElementById("capture-goal");
+  const tagsInput = document.getElementById("input-custom-dropdown");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("hello");
-   
-    window.onload = function() {
-      console.log(goal.value);
-      setTodos(...todos, [{title: goal.value, tags: tags, completed: false}]);
-      console.log(todos);
+    const newTodo = {
+      id: v4(),
+      title: goals.value,
+      tags: tagsInput.value,
+      completed: false,
     };
-    
-    // setTodos([...todos, {title: goal.value, tags: tags.value, completed: false}]);
-    // console.log(todos);
-  };
+    setTodos([...todos, newTodo]);
+  }
+
 
   return (
     <>
@@ -90,11 +87,11 @@ export default function Capture() {
           Submit
         </button>
       </form>
-      <ul>
+      <ul id="goalList">
         {todos.map((todo) => (
           <li>
             <div>
-            <input type="checkbox" name="" id="" className="mx-2" checked={todo.completed} />
+            <input type="checkbox" name="" id="" className="mx-2" />
             {todo.title}
             <input name='tags4' readonly value={todo.tags} className="mx-2"></input>
             </div>
