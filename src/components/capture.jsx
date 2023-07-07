@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
 export default function Capture() {
+  var index = 0;
   useEffect(() => {
 
     const input = document.querySelector('input[name="input-custom-dropdown"]');
@@ -28,34 +29,46 @@ export default function Capture() {
     
   }, []);
 
-  const [todos, setTodos] = useState([{
-    id: v4(),
-    title: "test1",
-    tags: ["test2", "test3"],
-    completed: false,
-  },
+
+
+  const [todos, setTodos] = useState([
   {
     id: v4(),
     title: "test4",
-    tags: ["test5", "test6"],
+    tags: ["test2", "test3"],
     completed: false,
   }]);
 
   const [tags, setTags] = useState([]);
-  const goals = document.getElementById("capture-goal");
-  const tagsInput = document.getElementById("input-custom-dropdown");
+
+ 
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const goals = document.querySelector("#capture-goal").value;
+    const tagsInput = document.querySelector("#input-custom-dropdown").value;
     const newTodo = {
       id: v4(),
-      title: goals.value,
-      tags: tagsInput.value,
+      title: goals,
+      tags: tagsInput,
       completed: false,
     };
-    setTodos([...todos, newTodo]);
+    setTodos([newTodo, ...todos ]);
   }
 
+
+
+
+  function popTodo(id) {
+    console.log("pop!")
+    for (let i = 0; i < todos.length; i++) {
+      if (todos[i].id === id) {
+
+          todos.pop()
+      }
+    }
+    
+  }
 
   return (
     <>
@@ -67,7 +80,7 @@ export default function Capture() {
           required="required"
           id="capture-goal"
           name="capture-goal"
-          value="hi"
+
         />
 
         <input
@@ -76,7 +89,7 @@ export default function Capture() {
           placeholder="write some tags"
           id="input-custom-dropdown"
         ></input>
-
+        
         <button
           type="submit"
           className="bg-cyan-400 text-white font-bold py-2 px-4 rounded-full mt-4"
@@ -88,12 +101,14 @@ export default function Capture() {
         </button>
       </form>
       <ul id="goalList">
+
         {todos.map((todo) => (
+          
           <li>
             <div>
-            <input type="checkbox" name="" id="" className="mx-2" />
+            <input type="checkbox" name="" id={todo.id} className="mx-2" value={todo.completed} onClick={popTodo(todo.id)}  />
             {todo.title}
-            <input name='tags4' readonly value={todo.tags} className="mx-2"></input>
+            <input name='tags4' readOnly className="mx-2"></input>
             </div>
           </li>
         ))}
