@@ -4,6 +4,22 @@ import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
 export default function Capture() {
+  const [todos, setTodos] = useState([]);
+
+  function addGoal(text, tag) {
+    setTodos([...todos, {id: v4(), title: text, tags: [tag], completed: false}])
+
+  }
+
+  function deleteGoal(goalId) {
+    const removeItem = todos.filter((t) => {
+
+      t.id !== goalId
+      console.log(t)
+    })
+
+  }
+
   var index = 0;
   useEffect(() => {
 
@@ -31,13 +47,7 @@ export default function Capture() {
 
 
 
-  const [todos, setTodos] = useState([
-  {
-    id: v4(),
-    title: "test4",
-    tags: ["test2", "test3"],
-    completed: false,
-  }]);
+  
 
   const [tags, setTags] = useState([]);
 
@@ -60,15 +70,22 @@ export default function Capture() {
 
 
   function popTodo(id) {
-    console.log("pop!")
+    
     for (let i = 0; i < todos.length; i++) {
       if (todos[i].id === id) {
 
           todos.pop()
       }
     }
+    console.log("pop!")
+  }
+
+
+  function completeTodo() {
     
   }
+
+
 
   return (
     <>
@@ -95,23 +112,29 @@ export default function Capture() {
           className="bg-cyan-400 text-white font-bold py-2 px-4 rounded-full mt-4"
           id="capture-submit"
           name="capture-submit"
-          
+          onClick={addGoal}
         >
           Submit
         </button>
+        
       </form>
       <ul id="goalList">
 
         {todos.map((todo) => (
           
-          <li>
+          <li key={todo.id}>
             <div>
-            <input type="checkbox" name="" id={todo.id} className="mx-2" value={todo.completed} onClick={popTodo(todo.id)}  />
+            <input type="checkbox" name="" id={todo.id} className="mx-2" on={todo.completed ? true : false}  />
             {todo.title}
             <input name='tags4' readOnly className="mx-2"></input>
+            <button onClick={ () => deleteGoal(todo.id)}>Delete</button>
             </div>
           </li>
         ))}
       </ul>
     </>
   )}
+
+const demoTasks = [
+  {id: v4(), title: "test4", tags: ["test2", "test3"], completed: false},
+  {id: v4(), title: "test5", tags: ["test4", "test5"], completed: false}]
