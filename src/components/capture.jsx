@@ -4,21 +4,15 @@ import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 
 export default function Capture() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState([{id: v4(), title: "test4", tags: ["test2", "test3"], completed: false},
+  {id: v4(), title: "test5", tags: ["test4", "test5"], completed: false}]);
 
   function addGoal(text, tag) {
     setTodos([...todos, {id: v4(), title: text, tags: [tag], completed: false}])
 
   }
 
-  function deleteGoal(goalId) {
-    const removeItem = todos.filter((t) => {
 
-      t.id !== goalId
-      console.log(t)
-    })
-
-  }
 
   var index = 0;
   useEffect(() => {
@@ -64,6 +58,8 @@ export default function Capture() {
       completed: false,
     };
     setTodos([newTodo, ...todos ]);
+    document.querySelector("#capture-goal").value = ""
+    document.querySelector("#input-custom-dropdown").value = ""
   }
 
 
@@ -81,10 +77,9 @@ export default function Capture() {
   }
 
 
-  function completeTodo() {
-    
+  function deleteGoal(id) {
+    setTodos(todos.filter(t => t.id !== id ))
   }
-
 
 
   return (
@@ -112,7 +107,7 @@ export default function Capture() {
           className="bg-cyan-400 text-white font-bold py-2 px-4 rounded-full mt-4"
           id="capture-submit"
           name="capture-submit"
-          onClick={addGoal}
+
         >
           Submit
         </button>
@@ -124,10 +119,10 @@ export default function Capture() {
           
           <li key={todo.id}>
             <div>
-            <input type="checkbox" name="" id={todo.id} className="mx-2" on={todo.completed ? true : false}  />
+            <input type="checkbox" name="" className="mx-2"/>
             {todo.title}
             <input name='tags4' readOnly className="mx-2"></input>
-            <button onClick={ () => deleteGoal(todo.id)}>Delete</button>
+            <button className="border border-1 border-blue-400 rounded-md hover:bg-red-600 hover:text-white transition ease-in-out delay-50 p-1" onClick={() => deleteGoal(todo.id)}>Delete</button>
             </div>
           </li>
         ))}
@@ -136,5 +131,4 @@ export default function Capture() {
   )}
 
 const demoTasks = [
-  {id: v4(), title: "test4", tags: ["test2", "test3"], completed: false},
-  {id: v4(), title: "test5", tags: ["test4", "test5"], completed: false}]
+  ]
