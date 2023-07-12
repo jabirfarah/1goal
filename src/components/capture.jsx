@@ -6,7 +6,9 @@ import { v4 } from 'uuid';
 export default function Capture() {
   const [todos, setTodos] = useState([{id: v4(), title: "test4", tags: ["test2", "test3"], completed: false},
   {id: v4(), title: "test5", tags: ["test4", "test5"], completed: false}]);
-
+  
+  const [todoEditing, setTodoEditing] = useState(null);
+  const [editText, setEditText] = useState("")
   function addGoal(text, tag) {
     setTodos([...todos, {id: v4(), title: text, tags: [tag], completed: false}])
 
@@ -20,7 +22,6 @@ export default function Capture() {
     const input = document.querySelector('input[name="input-custom-dropdown"]');
     const tagify = new Tagify(input, 
       {
-
         whitelist: [],
         dropdown: {
           enabled: 1,
@@ -28,15 +29,15 @@ export default function Capture() {
           classname: "tags-look",
           closeOnSelect: false,
           }},)
-    // tagify.addTags([]);
+
     
   }, []);
 
   useEffect(() => {
     var output = document.querySelector('input[name=tags4]'),
     tagifyOutput = new Tagify(output);
-    // tagify.addTags([]);
-    
+
+
   }, []);
 
 
@@ -81,6 +82,31 @@ export default function Capture() {
     setTodos(todos.filter(t => t.id !== id ))
   }
 
+  function handleUpdateGoal(id) {
+
+    setTodos(
+      todos.map((t) => {
+        if (t.id === todos.id) {
+          return todos;
+        } else {
+          return t;
+        }
+      })
+    );
+  }
+
+  function editTodo(id) {
+    const updatedTodos = [...todos].map((t) => {
+      if (t.id === id) {
+        t.title = editText
+      }
+      return t
+    })
+    setTodos(updatedTodos)
+    setTodoEditing(null)
+    setEditText("")
+  }
+
 
   return (
     <>
@@ -113,22 +139,32 @@ export default function Capture() {
         </button>
         
       </form>
-      <ul id="goalList">
 
+
+
+      <ul id="goalList">
+        
         {todos.map((todo) => (
           
           <li key={todo.id}>
+            
+            
+
             <div>
             <input type="checkbox" name="" className="mx-2"/>
-            {todo.title}
-            <input name='tags4' readOnly className="mx-2"></input>
+            
+            {todoEditing === todo.id ?  <input type="text" onChange={(e) => setEditText(e.target.value)} value={editText} />
+             :  <div>{todo.title}</div> }
+            
+            {/* <input name='tags4' readOnly className="mx-2"></input> */}
+            <button className="border border-1 border-blue-400 rounded-md hover:bg-gray-600 hover:text-white transition ease-in-out delay-50 p-1 mx-1" onClick={() => setTodoEditing(todo.id)}>Edit</button>
+
             <button className="border border-1 border-blue-400 rounded-md hover:bg-red-600 hover:text-white transition ease-in-out delay-50 p-1" onClick={() => deleteGoal(todo.id)}>Delete</button>
+            <button onClick={() => editTodo(todo.id)} className="border border-1 border-blue-400 rounded-md hover:bg-gray-600 hover:text-white transition ease-in-out delay-50 p-1">Save</button>
             </div>
           </li>
         ))}
       </ul>
+      
     </>
   )}
-
-const demoTasks = [
-  ]
